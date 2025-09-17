@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{431D7185-2FA9-4628-BF7B-60CE1F7FFCC6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{9EE5961C-796C-40C3-A773-1D4E2E2E659E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Keycloak.Net", "src\Keycloak.Net\Keycloak.Net.csproj", "{1E1049EF-548A-45EA-9025-FAC294B8F32B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Keycloak.Net.Web", "src\Keycloak.Net.Web\Keycloak.Net.Web.csproj", "{2CF14BFE-B620-4518-A668-29EDE19E7A02}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Keycloak.Net.Test", "test\Keycloak.Net.Test\Keycloak.Net.Test.csproj", "{996AC27D-978B-498B-9FD7-14BB16951962}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1E1049EF-548A-45EA-9025-FAC294B8F32B} = {431D7185-2FA9-4628-BF7B-60CE1F7FFCC6}
+		{2CF14BFE-B620-4518-A668-29EDE19E7A02} = {431D7185-2FA9-4628-BF7B-60CE1F7FFCC6}
+		{996AC27D-978B-498B-9FD7-14BB16951962} = {9EE5961C-796C-40C3-A773-1D4E2E2E659E}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1E1049EF-548A-45EA-9025-FAC294B8F32B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E1049EF-548A-45EA-9025-FAC294B8F32B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E1049EF-548A-45EA-9025-FAC294B8F32B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E1049EF-548A-45EA-9025-FAC294B8F32B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CF14BFE-B620-4518-A668-29EDE19E7A02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CF14BFE-B620-4518-A668-29EDE19E7A02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CF14BFE-B620-4518-A668-29EDE19E7A02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CF14BFE-B620-4518-A668-29EDE19E7A02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{996AC27D-978B-498B-9FD7-14BB16951962}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{996AC27D-978B-498B-9FD7-14BB16951962}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{996AC27D-978B-498B-9FD7-14BB16951962}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{996AC27D-978B-498B-9FD7-14BB16951962}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
