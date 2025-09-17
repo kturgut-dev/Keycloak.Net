@@ -11,6 +11,12 @@ public interface IKeycloakClient
     Task<KeycloakTokenResponse> RequestTokenAsync(KeycloakTokenRequest request,
         CancellationToken cancellationToken = default);
 
+    /// <summary>
+    ///     Retrieves an access token suitable for calling the Keycloak Admin REST API. The method automatically chooses the
+    ///     appropriate grant type based on the configured credentials (client credentials vs. resource owner password).
+    /// </summary>
+    Task<KeycloakTokenResponse> GetManagementTokenAsync(CancellationToken cancellationToken = default);
+
     Task<IReadOnlyList<UserRepresentation>> GetUsersAsync(UserQueryParameters? query = null,
         CancellationToken cancellationToken = default);
 

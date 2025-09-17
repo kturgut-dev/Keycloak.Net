@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Keycloak.Net.Abstractions;
+using Keycloak.Net.Clients.AttackDetection;
 using Keycloak.Net.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -43,6 +44,18 @@ public static class ServiceCollectionExtensions
             .Configure(configure);
 
         services.AddSingleton<IValidateOptions<KeycloakOptions>>(new KeycloakOptionsValidator());
+    }
+
+    /// <summary>
+    ///     Adds the attack detection client so applications can manage brute-force protections through dependency injection.
+    ///     Call <see cref="AddKeycloakCore(IServiceCollection, Action{KeycloakOptions})" /> beforehand to configure options.
+    /// </summary>
+    public static IServiceCollection AddKeycloakAttackDetection(this IServiceCollection services)
+    {
+        if (services is null) throw new ArgumentNullException(nameof(services));
+
+        services.AddHttpClient<IAttackDetectionClient, AttackDetectionClient>();
+        return services;
     }
 
     private sealed class KeycloakOptionsValidator : IValidateOptions<KeycloakOptions>

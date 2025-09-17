@@ -1,11 +1,9 @@
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Text.Json;
 using Keycloak.Net.Abstractions;
 using Keycloak.Net.Configuration;
-using Keycloak.Net.Exceptions;
 using Keycloak.Net.Internal;
-using Keycloak.Net.Models.Common;
+using Keycloak.Net.Internal.Http;
 using Keycloak.Net.Models.Tokens;
 using Keycloak.Net.Models.Users;
 using Microsoft.Extensions.Options;
@@ -17,11 +15,6 @@ namespace Keycloak.Net;
 /// </summary>
 public sealed class KeycloakClient : IKeycloakClient
 {
-    private static readonly JsonSerializerOptions SerializerOptions = new(JsonSerializerDefaults.Web)
-    {
-        PropertyNameCaseInsensitive = true
-    };
-
     private readonly HttpClient _httpClient;
     private readonly KeycloakOptions _options;
 
@@ -99,10 +92,12 @@ public sealed class KeycloakClient : IKeycloakClient
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken.AccessToken);
 
         using var response = await _httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
-        if (!response.IsSuccessStatusCode) await ThrowForErrorAsync(response, cancellationToken).ConfigureAwait(false);
+        if (!response.IsSuccessStatusCode)
+            await KeycloakHttpResponseHandler.ThrowForErrorAsync(response, cancellationToken).ConfigureAwait(false);
     }
 
-    private async Task<KeycloakTokenResponse> GetManagementTokenAsync(CancellationToken cancellationToken)
+    /// <inheritdoc />
+    public async Task<KeycloakTokenResponse> GetManagementTokenAsync(CancellationToken cancellationToken = default)
     {
         if (!string.IsNullOrWhiteSpace(_options.Username) && !string.IsNullOrWhiteSpace(_options.Password))
         {
@@ -119,39 +114,11 @@ public sealed class KeycloakClient : IKeycloakClient
     {
         if (response.IsSuccessStatusCode)
         {
-            if (response.Content.Headers.ContentLength == 0) return default;
-
-            await using var contentStream =
-                await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
-            if (contentStream is null) return default;
-
-            return await JsonSerializer.DeserializeAsync<T>(contentStream, SerializerOptions, cancellationToken)
+            return await KeycloakHttpResponseHandler.ReadJsonAsync<T>(response, cancellationToken)
                 .ConfigureAwait(false);
         }
 
-        await ThrowForErrorAsync(response, cancellationToken).ConfigureAwait(false);
+        await KeycloakHttpResponseHandler.ThrowForErrorAsync(response, cancellationToken).ConfigureAwait(false);
         return default;
-    }
-
-    private static async Task ThrowForErrorAsync(HttpResponseMessage response, CancellationToken cancellationToken)
-    {
-        ErrorResponse? error = null;
-        string? content = null;
-
-        if (response.Content is not null)
-        {
-            content = await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
-            if (!string.IsNullOrWhiteSpace(content))
-                try
-                {
-                    error = JsonSerializer.Deserialize<ErrorResponse>(content, SerializerOptions);
-                }
-                catch (JsonException)
-                {
-                    // Ignore JSON parse errors and rely on the raw content.
-                }
-        }
-
-        throw new KeycloakHttpException(response.StatusCode, error, content);
     }
 }
